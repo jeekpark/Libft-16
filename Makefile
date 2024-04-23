@@ -1,7 +1,7 @@
 NAME			=	libft.a
-CPPFLAGS		=	-MMD
-CFLAGS			=	-Wall -Wextra -Werror
-ARFLAGS			=	rsc
+CC			=	cc
+CFLAGS			=	-c -Wall -Wextra -Werror
+
 SRCS			=	\
 ft_bzero.c\
 ft_atoi.c\
@@ -38,19 +38,38 @@ ft_tolower.c\
 ft_toupper.c\
 ft_memcmp.c
 
+SRCS_B			=	\
+ft_lstnew_bonus.c\
+ft_lstadd_front_bonus.c\
+ft_lstsize_bonus.c\
+ft_lstlast_bonus.c\
+ft_lstadd_back_bonus.c\
+ft_lstdelone_bonus.c\
+ft_lstclear_bonus.c\
+ft_lstiter_bonus.c\
+ft_lstmap_bonus.c
 
+HEADER			=	libft.h
 
 OBJS			=	$(SRCS:.c=.o)
-DEPS			=	$(SRCS:.c=.d)
--include $(DEPS)
+OBJS_B			=	$(SRCS_B:.c=.o)
+
+ifdef WITH
+	OB = $(OBJS) $(OBJS_B)
+else
+	OB = $(OBJS)
+endif
 
 all : $(NAME)
 
-$(NAME) : $(OBJS)
-	$(AR) $(ARFLAGS) $@ $^
+bonus :
+	make all WITH=1
+
+$(NAME) : $(OB)
+	$(AR) -rc $@ $^
 
 clean :
-	$(RM) -rf $(OBJS) $(DEPS)
+	$(RM) -rf $(OBJS) $(OBJS_B)
 
 fclean : clean
 	$(RM) -rf $(NAME)
@@ -59,3 +78,4 @@ re :
 	make fclean
 	make all
 
+.PHONY: all bonus clean fclean re
